@@ -57,7 +57,12 @@ export enum StatType {
     LiberationDmg,
 }
 
-export class Stats {
+export interface Stat {
+    type: StatType;
+    value: number;
+}
+
+export class CharacterStats {
     baseAtk: number;
     baseHp: number;
     baseDef: number;
@@ -126,84 +131,85 @@ export class Stats {
     }
 
     addEcho(echo: Echo) {
-        this.addStat(echo.mainStatType, echo.mainStatValue);
-        this.addStat(echo.secondaryStatType, echo.secondaryStatValue);
-        echo.substats.forEach(substat => this.addStat(substat.type, substat.value));
+        this.addStat(echo.mainStat);
+        this.addStat(echo.secondaryStat);
+        echo.substats.forEach(substat => this.addStat(substat));
     }
 
     removeEcho(echo: Echo) {
-        this.removeStat(echo.mainStatType, echo.mainStatValue);
-        this.removeStat(echo.secondaryStatType, echo.secondaryStatValue);
-        echo.substats.forEach(substat => this.removeStat(substat.type, substat.value));
+        this.removeStat(echo.mainStat);
+        this.removeStat(echo.secondaryStat);
+        echo.substats.forEach(substat => this.removeStat(substat));
     }
 
-    addStat(statType: StatType, value: number) {
-        switch (statType) {
+    addStat(stat: Stat) {
+        switch (stat.type) {
             case StatType.AtkFlat:
-                this.atkFlat += value;
+                this.atkFlat += stat.value;
                 break;
             case StatType.HpFlat:
-                this.hpFlat += value;
+                this.hpFlat += stat.value;
                 break;
             case StatType.DefFlat:
-                this.defFlat += value;
+                this.defFlat += stat.value;
                 break;
             case StatType.AtkPercent:
-                this.atkPercent += value;
+                this.atkPercent += stat.value;
                 break;
             case StatType.HpPercent:
-                this.hpPercent += value;
+                this.hpPercent += stat.value;
                 break;
             case StatType.DefPercent:
-                this.defPercent += value;
+                this.defPercent += stat.value;
                 break;
             case StatType.CritRate:
-                this.critRate += value;
+                this.critRate += stat.value;
                 break;
             case StatType.CritDmg:
-                this.critDmg += value;
+                this.critDmg += stat.value;
                 break;
             case StatType.EnergyRecharge:
-                this.energyRecharge += value;
+                this.energyRecharge += stat.value;
                 break;
             case StatType.HealingBonus:
-                this.healingBonus += value;
+                this.healingBonus += stat.value;
                 break;
             case StatType.GlacioDmg:
-                this.elementDmg[Element.Glacio] += value;
+                this.elementDmg[Element.Glacio] += stat.value;
                 break;
             case StatType.FusionDmg:
-                this.elementDmg[Element.Fusion] += value;
+                this.elementDmg[Element.Fusion] += stat.value;
                 break;
             case StatType.ElectroDmg:
-                this.elementDmg[Element.Electro] += value;
+                this.elementDmg[Element.Electro] += stat.value;
                 break;
             case StatType.AeroDmg:
-                this.elementDmg[Element.Aero] += value;
+                this.elementDmg[Element.Aero] += stat.value;
                 break;
             case StatType.SpectroDmg:
-                this.elementDmg[Element.Spectro] += value;
+                this.elementDmg[Element.Spectro] += stat.value;
                 break;
             case StatType.HavocDmg:
-                this.elementDmg[Element.Havoc] += value;
+                this.elementDmg[Element.Havoc] += stat.value;
                 break;
             case StatType.SkillDmg:
-                this.moveDmg[MoveType.Skill] += value;
+                this.moveDmg[MoveType.Skill] += stat.value;
                 break;
             case StatType.BasicDmg:
-                this.moveDmg[MoveType.Basic] += value;
+                this.moveDmg[MoveType.Basic] += stat.value;
                 break;
             case StatType.HeavyDmg:
-                this.moveDmg[MoveType.Heavy] += value;
+                this.moveDmg[MoveType.Heavy] += stat.value;
                 break;
             case StatType.LiberationDmg:
-                this.moveDmg[MoveType.Liberation] += value;
+                this.moveDmg[MoveType.Liberation] += stat.value;
                 break;
         }
     }
 
-    removeStat(statType: StatType, value: number) {
-        this.addStat(statType, -value);
+    removeStat(stat: Stat) {
+        let negativeStat = {type: stat.type, value: -stat.value};
+        this.addStat(negativeStat);
     }
 }
 
