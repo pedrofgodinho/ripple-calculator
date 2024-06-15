@@ -134,6 +134,36 @@ export class CharacterStats {
         return this.getMoveBaseDmg(move) * (1 + this.critRate * (this.critDmg - 1));
     }
 
+    getEnemyResistance(character_level: number, enemy_level: number): number {
+        // TODO better names: eleRes and dmgReduction do the opposite of what they sound like
+        let defIgnore = 0.0; // TODO
+        let resPen = 0.0; // TODO
+        let eleRes = 1.0; // TODO
+        let dmgReduction = 1.0; // TODO
+
+        const baseRes = 0.1;
+        const resTotal = baseRes + resPen;
+        const resAdjusted = resTotal <= 0 ? 1 - resTotal / 2 : (resTotal <= 0.8 ? 1 - resTotal : 1 / (1 + 5 * resTotal));
+
+        const enemyDef = 8 * enemy_level + 792;
+        const characterLevelPart = 8 * character_level + 800;
+        const defMult = characterLevelPart / (characterLevelPart + enemyDef * (1 - defIgnore));
+
+        return resAdjusted * eleRes * dmgReduction * defMult;
+    }
+
+    getMoveDmg(move: Move, character_level: number, enemy_level: number): number {
+        return this.getMoveBaseDmg(move) * this.getEnemyResistance(character_level, enemy_level);
+    }
+
+    getMoveDmgCrit(move: Move, character_level: number, enemy_level: number): number {
+        return this.getMoveBaseDmgCrit(move) * this.getEnemyResistance(character_level, enemy_level);
+    }
+
+    getMoveDmgAvg(move: Move, character_level: number, enemy_level: number): number {
+        return this.getMoveBaseDmgAvg(move) * this.getEnemyResistance(character_level, enemy_level);
+    }
+
     addEcho(echo: Echo) {
         this.addStat(echo.mainStat);
         this.addStat(echo.secondaryStat);
