@@ -1,6 +1,6 @@
 import { CharacterStats } from "./stats";
 
-export { BaseStats, Element, Move, MoveType, StatType, CharacterStats, Stat } from "./stats";
+export { BaseStats, MoveElement, Move, MoveType, StatType, CharacterStats, Stat } from "./stats";
 export { Echo } from "./echoes";
 
 export function exampleStats(): CharacterStats {

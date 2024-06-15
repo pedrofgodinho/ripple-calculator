@@ -1,7 +1,7 @@
 import { Echo } from "./echoes";
 
 type ElementsDmg = [number, number, number, number, number, number, number];
-export enum Element {
+export enum MoveElement {
     Glacio,
     Fusion,
     Electro,
@@ -25,7 +25,7 @@ export interface BaseStats {
 }
 
 export interface Move {
-    element: Element;
+    element: MoveElement;
     moveType: MoveType;
     moveMultiplier: number;
 }
@@ -175,22 +175,22 @@ export class CharacterStats {
                 this.healingBonus += stat.value;
                 break;
             case StatType.GlacioDmg:
-                this.elementDmg[Element.Glacio] += stat.value;
+                this.elementDmg[MoveElement.Glacio] += stat.value;
                 break;
             case StatType.FusionDmg:
-                this.elementDmg[Element.Fusion] += stat.value;
+                this.elementDmg[MoveElement.Fusion] += stat.value;
                 break;
             case StatType.ElectroDmg:
-                this.elementDmg[Element.Electro] += stat.value;
+                this.elementDmg[MoveElement.Electro] += stat.value;
                 break;
             case StatType.AeroDmg:
-                this.elementDmg[Element.Aero] += stat.value;
+                this.elementDmg[MoveElement.Aero] += stat.value;
                 break;
             case StatType.SpectroDmg:
-                this.elementDmg[Element.Spectro] += stat.value;
+                this.elementDmg[MoveElement.Spectro] += stat.value;
                 break;
             case StatType.HavocDmg:
-                this.elementDmg[Element.Havoc] += stat.value;
+                this.elementDmg[MoveElement.Havoc] += stat.value;
                 break;
             case StatType.SkillDmg:
                 this.moveDmg[MoveType.Skill] += stat.value;
