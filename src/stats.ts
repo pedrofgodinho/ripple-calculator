@@ -31,6 +31,10 @@ export interface Move {
 }
 
 export enum StatType {
+    BaseAtk,
+    BaseHp,
+    BaseDef,
+
     AtkFlat,
     HpFlat,
     DefFlat,
@@ -144,6 +148,9 @@ export class CharacterStats {
 
     addStat(stat: Stat) {
         switch (stat.type) {
+            case StatType.BaseAtk:
+                this.baseAtk += stat.value;
+                break;
             case StatType.AtkFlat:
                 this.atkFlat += stat.value;
                 break;
