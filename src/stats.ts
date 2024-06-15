@@ -126,14 +126,14 @@ export class Stats {
     }
 
     addEcho(echo: Echo) {
-        this.addStat(echo.main_stat_type, echo.main_stat_value);
-        this.addStat(echo.secondary_stat_type, echo.secondary_stat_value);
+        this.addStat(echo.mainStatType, echo.mainStatValue);
+        this.addStat(echo.secondaryStatType, echo.secondaryStatValue);
         echo.substats.forEach(substat => this.addStat(substat.type, substat.value));
     }
 
     removeEcho(echo: Echo) {
-        this.removeStat(echo.main_stat_type, echo.main_stat_value);
-        this.removeStat(echo.secondary_stat_type, echo.secondary_stat_value);
+        this.removeStat(echo.mainStatType, echo.mainStatValue);
+        this.removeStat(echo.secondaryStatType, echo.secondaryStatValue);
         echo.substats.forEach(substat => this.removeStat(substat.type, substat.value));
     }
 
