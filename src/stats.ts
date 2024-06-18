@@ -1,6 +1,6 @@
 import { Echo } from "./echoes";
 
-type ElementsDmg = [number, number, number, number, number, number, number];
+type ElementsDmg = [number, number, number, number, number, number];
 export enum MoveElement {
     Glacio,
     Fusion,
@@ -66,6 +66,12 @@ export interface Stat {
     value: number;
 }
 
+export interface StackableStat {
+    stat: Stat;
+    minStacks: number;
+    maxStacks: number;
+}
+
 export class CharacterStats {
     baseAtk: number;
     baseHp: number;
@@ -106,7 +112,7 @@ export class CharacterStats {
         this.energyRecharge = 0;
         this.healingBonus = 0;
 
-        this.elementDmg = [0, 0, 0, 0, 0, 0, 0];
+        this.elementDmg = [0, 0, 0, 0, 0, 0];
         this.moveDmg = [0, 0, 0, 0];
     }
 
@@ -176,77 +182,77 @@ export class CharacterStats {
         echo.substats.forEach(substat => this.removeStat(substat));
     }
 
-    addStat(stat: Stat) {
+    addStat(stat: Stat, stacks: number = 1) {
         switch (stat.type) {
             case StatType.BaseAtk:
-                this.baseAtk += stat.value;
+                this.baseAtk += stat.value * stacks;
                 break;
             case StatType.AtkFlat:
-                this.atkFlat += stat.value;
+                this.atkFlat += stat.value * stacks;
                 break;
             case StatType.HpFlat:
-                this.hpFlat += stat.value;
+                this.hpFlat += stat.value * stacks;
                 break;
             case StatType.DefFlat:
-                this.defFlat += stat.value;
+                this.defFlat += stat.value * stacks;
                 break;
             case StatType.AtkPercent:
-                this.atkPercent += stat.value;
+                this.atkPercent += stat.value * stacks;
                 break;
             case StatType.HpPercent:
-                this.hpPercent += stat.value;
+                this.hpPercent += stat.value * stacks;
                 break;
             case StatType.DefPercent:
-                this.defPercent += stat.value;
+                this.defPercent += stat.value * stacks;
                 break;
             case StatType.CritRate:
-                this.critRate += stat.value;
+                this.critRate += stat.value * stacks;
                 break;
             case StatType.CritDmg:
-                this.critDmg += stat.value;
+                this.critDmg += stat.value * stacks;
                 break;
             case StatType.EnergyRecharge:
-                this.energyRecharge += stat.value;
+                this.energyRecharge += stat.value * stacks;
                 break;
             case StatType.HealingBonus:
-                this.healingBonus += stat.value;
+                this.healingBonus += stat.value * stacks;
                 break;
             case StatType.GlacioDmg:
-                this.elementDmg[MoveElement.Glacio] += stat.value;
+                this.elementDmg[MoveElement.Glacio] += stat.value * stacks;
                 break;
             case StatType.FusionDmg:
-                this.elementDmg[MoveElement.Fusion] += stat.value;
+                this.elementDmg[MoveElement.Fusion] += stat.value * stacks;
                 break;
             case StatType.ElectroDmg:
-                this.elementDmg[MoveElement.Electro] += stat.value;
+                this.elementDmg[MoveElement.Electro] += stat.value * stacks;
                 break;
             case StatType.AeroDmg:
-                this.elementDmg[MoveElement.Aero] += stat.value;
+                this.elementDmg[MoveElement.Aero] += stat.value * stacks;
                 break;
             case StatType.SpectroDmg:
-                this.elementDmg[MoveElement.Spectro] += stat.value;
+                this.elementDmg[MoveElement.Spectro] += stat.value * stacks;
                 break;
             case StatType.HavocDmg:
-                this.elementDmg[MoveElement.Havoc] += stat.value;
+                this.elementDmg[MoveElement.Havoc] += stat.value * stacks;
                 break;
             case StatType.SkillDmg:
-                this.moveDmg[MoveType.Skill] += stat.value;
+                this.moveDmg[MoveType.Skill] += stat.value * stacks;
                 break;
             case StatType.BasicDmg:
-                this.moveDmg[MoveType.Basic] += stat.value;
+                this.moveDmg[MoveType.Basic] += stat.value * stacks;
                 break;
             case StatType.HeavyDmg:
-                this.moveDmg[MoveType.Heavy] += stat.value;
+                this.moveDmg[MoveType.Heavy] += stat.value * stacks;
                 break;
             case StatType.LiberationDmg:
-                this.moveDmg[MoveType.Liberation] += stat.value;
+                this.moveDmg[MoveType.Liberation] += stat.value * stacks;
                 break;
         }
     }
 
-    removeStat(stat: Stat) {
+    removeStat(stat: Stat, stacks: number = 1) {
         let negativeStat = {type: stat.type, value: -stat.value};
-        this.addStat(negativeStat);
+        this.addStat(negativeStat, stacks);
     }
 }
 
