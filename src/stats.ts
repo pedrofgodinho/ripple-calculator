@@ -116,6 +116,10 @@ export class CharacterStats {
         this.moveDmg = [0, 0, 0, 0];
     }
 
+    static fromInterface(i: unknown): CharacterStats {
+        return Object.assign(new CharacterStats({atk: 0, hp: 0, def: 0}), i);
+    }
+
     getAtk(): number {
         return this.baseAtk * (1 + this.atkPercent) + this.atkFlat;
     }

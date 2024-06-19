@@ -12,6 +12,14 @@ export class Character {
         this.extraStats = {};
     }
 
+    static fromInterface(i: unknown): Character {
+        let parsed = i as Character;
+        let character = new Character({atk: 0, hp: 0, def: 0}); // dummy data that will be overwritten on the next line
+        character.stats = CharacterStats.fromInterface(parsed.stats);
+        character.extraStats = parsed.extraStats;
+        return character;
+    }
+
     unequipWeapon(weapon: Weapon) {
         this.stats.removeStat({type: StatType.BaseAtk, value: weapon.atk});
         this.stats.removeStat(weapon.secondaryStat);
