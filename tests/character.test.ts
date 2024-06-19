@@ -129,7 +129,10 @@ describe('CharacterStats', () => {
 
 describe('Character', () => {
     it('should match the example stats', () => {
-        let character = new Character(BASE_STATS, WEAPON, [ECHO1, ECHO2, null, null, null]);
+        let character = new Character(BASE_STATS);
+        character.equipWeapon(WEAPON);
+        character.equipEcho(ECHO1);
+        character.equipEcho(ECHO2);
 
         character.addExtraStatStacks("Bonus1", {type: StatType.AtkPercent, value: 0.018}, 2);
         character.addExtraStatStacks("Bonus3", {type: StatType.CritRate, value: 0.012}, 2);
@@ -163,8 +166,11 @@ describe('Character', () => {
             ]
         };
 
-        let character = new Character(BASE_STATS, WEAPON, [echo1, echo2, null, null, null]);
-
+        let character = new Character(BASE_STATS);
+        character.equipWeapon(WEAPON);
+        character.equipEcho(ECHO1);
+        character.equipEcho(ECHO2);
+        
         character.addExtraStatStacks("Bonus1", {type: StatType.AtkPercent, value: 0.018}, 2);
         character.addExtraStatStacks("Bonus3", {type: StatType.CritRate, value: 0.012}, 2);
         character.addExtraStatStacks("TempestTaming", {type: StatType.CritDmg, value: 0.12});

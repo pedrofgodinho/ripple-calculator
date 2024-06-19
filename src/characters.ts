@@ -7,18 +7,9 @@ export class Character {
     stats: CharacterStats;
     extraStats: {[key: string]: {stat: Stat, stacks: number}};
     
-    constructor(baseStats: BaseStats, weapon: Weapon, echoes: [Echo|null, Echo|null, Echo|null, Echo|null, Echo|null]) {
+    constructor(baseStats: BaseStats) {
         this.stats = new CharacterStats(baseStats);
         this.extraStats = {};
-        
-        for (let echo of echoes) {
-            if (echo !== null) {
-                this.stats.addEcho(echo);
-            }
-        }
-
-        // temp weapon so that we can call equipWeapon to set the stats
-        this.equipWeapon(weapon);
     }
 
     unequipWeapon(weapon: Weapon) {
