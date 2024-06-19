@@ -5,13 +5,10 @@ import { Weapon } from "./weapons";
 
 export class Character {
     stats: CharacterStats;
-    echoes: [Echo|null, Echo|null, Echo|null, Echo|null, Echo|null];
-    weapon: Weapon;
     extraStats: {[key: string]: {stat: Stat, stacks: number}};
     
     constructor(baseStats: BaseStats, weapon: Weapon, echoes: [Echo|null, Echo|null, Echo|null, Echo|null, Echo|null]) {
         this.stats = new CharacterStats(baseStats);
-        this.echoes = echoes;
         this.extraStats = {};
         
         for (let echo of echoes) {
@@ -21,38 +18,32 @@ export class Character {
         }
 
         // temp weapon so that we can call equipWeapon to set the stats
-        this.weapon = {
-            atk: 0,
-            secondaryStat: {type: StatType.BaseAtk, value: 0},
-            passiveStats: {}
-        };
         this.equipWeapon(weapon);
     }
 
-    equipWeapon(weapon: Weapon) {
-        // remove old weapon stats
-        this.stats.removeStat({type: StatType.BaseAtk, value: this.weapon.atk});
-        this.stats.removeStat(this.weapon.secondaryStat);
-        for (let key in this.weapon.passiveStats) {
-            this.deleteExtraStat(key);
-        }
-
-        this.weapon = weapon;
-        this.stats.addStat({type: StatType.BaseAtk, value: weapon.atk});
-        this.stats.addStat(weapon.secondaryStat);
+    unequipWeapon(weapon: Weapon) {
+        this.stats.removeStat({type: StatType.BaseAtk, value: weapon.atk});
+        this.stats.removeStat(weapon.secondaryStat);
         for (let key in weapon.passiveStats) {
-            this.addStacksToWeaponStat(key, weapon.passiveStats[key].minStacks);
+            this.deleteExtraStat(key);
         }
     }
 
-    setEcho(position: number, echo: Echo|null) {
-        if (this.echoes[position] !== null) {
-            this.stats.removeEcho(this.echoes[position]!);
+    equipWeapon(weapon: Weapon) {
+
+        this.stats.addStat({type: StatType.BaseAtk, value: weapon.atk});
+        this.stats.addStat(weapon.secondaryStat);
+        for (let key in weapon.passiveStats) {
+            this.addStacksToWeaponStat(weapon, key, weapon.passiveStats[key].minStacks);
         }
-        this.echoes[position] = echo;
-        if (echo !== null) {
-            this.stats.addEcho(echo);
-        }
+    }
+
+    equipEcho(echo: Echo) {
+        this.stats.addEcho(echo);
+    }
+
+    unequipEcho(echo: Echo) {
+        this.stats.removeEcho(echo);
     }
 
     addExtraStatStacks(key: string, stat: Stat, stacks: number = 1) {
@@ -83,28 +74,28 @@ export class Character {
         }
     }
 
-    addStacksToWeaponStat(key: string, stacks: number) {
+    addStacksToWeaponStat(weapon: Weapon, key: string, stacks: number) {
         if (this.extraStats[key] === undefined) {
-            this.extraStats[key] = {stat: this.weapon.passiveStats[key].stat, stacks: 0};
+            this.extraStats[key] = {stat: weapon.passiveStats[key].stat, stacks: 0};
         }
         let currentStacks = this.extraStats[key].stacks;
-        if (currentStacks === this.weapon.passiveStats[key].maxStacks) {
+        if (currentStacks === weapon.passiveStats[key].maxStacks) {
             return;
         }
-        if (currentStacks + stacks > this.weapon.passiveStats[key].maxStacks) { 
-            stacks = this.weapon.passiveStats[key].maxStacks - currentStacks;
+        if (currentStacks + stacks > weapon.passiveStats[key].maxStacks) { 
+            stacks = weapon.passiveStats[key].maxStacks - currentStacks;
         }
-        this.addExtraStatStacks(key, this.weapon.passiveStats[key].stat, stacks);
+        this.addExtraStatStacks(key, weapon.passiveStats[key].stat, stacks);
     }
 
-    removeStacksFromWeaponStat(key: string, stacks: number) {
+    removeStacksFromWeaponStat(weapon: Weapon, key: string, stacks: number) {
         let currentStacks = this.extraStats[key].stacks;  // this.extraStats[key] should always exist if the weapon is equipped
-        if (currentStacks === this.weapon.passiveStats[key].minStacks) {
+        if (currentStacks === weapon.passiveStats[key].minStacks) {
             return;
         }
-        if (currentStacks - stacks < this.weapon.passiveStats[key].minStacks) {
-            stacks = this.extraStats[key].stacks - this.weapon.passiveStats[key].minStacks;
+        if (currentStacks - stacks < weapon.passiveStats[key].minStacks) {
+            stacks = this.extraStats[key].stacks - weapon.passiveStats[key].minStacks;
         }
-        this.removeExtraStatStacks(key, this.weapon.passiveStats[key].stat, stacks);
+        this.removeExtraStatStacks(key, weapon.passiveStats[key].stat, stacks);
     }
 }

@@ -169,7 +169,7 @@ describe('Character', () => {
         character.addExtraStatStacks("Bonus3", {type: StatType.CritRate, value: 0.012}, 2);
         character.addExtraStatStacks("TempestTaming", {type: StatType.CritDmg, value: 0.12});
 
-        character.addStacksToWeaponStat("VerdantSummit7", 2);
+        character.addStacksToWeaponStat(WEAPON, "VerdantSummit7", 2);
 
         const stats = sampleStats();
         stats.moveDmg[MoveType.Heavy] += 0.24 * 2;
