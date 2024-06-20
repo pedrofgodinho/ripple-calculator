@@ -1,7 +1,7 @@
-import { StackableStat, StatType } from "./stats";
+import { StackableStat, Stat } from "./stats";
 
 export interface Weapon {
     atk: number;
-    secondaryStat: {type: StatType, value: number};
+    secondaryStat: Stat;
     passiveStats: {[key: string]: StackableStat};
 }
